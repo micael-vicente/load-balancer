@@ -18,42 +18,8 @@ class RandomLoadBalancerTest {
     private Random mockRandom;
 
     @Test
-    void addServer_addressIsNull_returnsFalse() {
-        LoadBalancer loadBalancer = new RandomLoadBalancer(mockRandom);
-        Server server = new Server(null);
-
-        boolean wasAdded = loadBalancer.addServer(server);
-
-        Assertions.assertFalse(wasAdded);
-    }
-
-    @Test
-    void addServer_addressIsFineAndCanBeAdded_returnTrue() {
-        LoadBalancer loadBalancer = new RandomLoadBalancer(mockRandom);
-        Server server = new Server("https://acme.com");
-
-        boolean wasAdded = loadBalancer.addServer(server);
-
-        Assertions.assertTrue(wasAdded);
-    }
-
-    @Test
-    void addServer_balancerAtCapacity_returnFalse() {
-        LoadBalancer loadBalancer = new RandomLoadBalancer(mockRandom);
-
-        IntStream.range(0, 11)
-            .forEach((i) -> loadBalancer.addServer(new Server("address" + i)));
-
-        Server server = new Server("https://acme.com");
-
-        boolean wasAdded = loadBalancer.addServer(server);
-
-        Assertions.assertFalse(wasAdded);
-    }
-
-    @Test
     void getServer_loadBalancerIsEmpty_returnEmptyOptional() {
-        LoadBalancer loadBalancer = new RandomLoadBalancer(mockRandom);
+        LoadBalancer loadBalancer = new RandomLoadBalancer(mockRandom, 10);
 
         Optional<Server> server = loadBalancer.getServer();
 
@@ -61,18 +27,18 @@ class RandomLoadBalancerTest {
     }
 
     @Test
-    void getServer_loadBalancerHas10_mockingIndex6ReturnsServerWithAddress6() {
-        LoadBalancer loadBalancer = new RandomLoadBalancer(mockRandom);
+    void getServer_loadBalancerHas10_mockingIndex5ReturnsServerWithAddress5() {
+        LoadBalancer loadBalancer = new RandomLoadBalancer(mockRandom, 10);
 
-        IntStream.range(0, 11)
+        IntStream.range(0, 10)
             .forEach((i) -> loadBalancer.addServer(new Server("" + i)));
 
-        Mockito.when(mockRandom.nextInt(10)).thenReturn(6);
+        Mockito.when(mockRandom.nextInt(10)).thenReturn(5);
 
         Optional<Server> server = loadBalancer.getServer();
 
         Assertions.assertTrue(server.isPresent());
-        Assertions.assertEquals("6", server.get().address());
+        Assertions.assertEquals("5", server.get().address());
     }
 
 

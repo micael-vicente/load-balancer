@@ -7,8 +7,8 @@ public class RandomLoadBalancer extends LoadBalancer {
 
     private final Random random;
 
-    public RandomLoadBalancer(Random random) {
-        super();
+    public RandomLoadBalancer(Random random, int maxCapacity) {
+        super(maxCapacity);
         this.random = random;
     }
 

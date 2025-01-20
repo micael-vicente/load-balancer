@@ -9,7 +9,7 @@ class RoundRobinLoadBalancerTest {
 
     @Test
     void getServer_balancerEmpty_returnOptionalEmpty() {
-        LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
+        LoadBalancer loadBalancer = new RoundRobinLoadBalancer(10);
 
         Optional<Server> server = loadBalancer.getServer();
 
@@ -18,7 +18,8 @@ class RoundRobinLoadBalancerTest {
 
     @Test
     void getServer_balancerHas3_returnFirst1Second2Third3() {
-        LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
+        LoadBalancer loadBalancer = new RoundRobinLoadBalancer(10);
+
         loadBalancer.addServer(new Server("1"));
         loadBalancer.addServer(new Server("2"));
         loadBalancer.addServer(new Server("3"));
@@ -37,7 +38,7 @@ class RoundRobinLoadBalancerTest {
 
     @Test
     void getServer_balancerHas3CurrentIs3_goesAroundTo1() {
-        LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
+        LoadBalancer loadBalancer = new RoundRobinLoadBalancer(10);
         loadBalancer.addServer(new Server("1"));
         loadBalancer.addServer(new Server("2"));
         loadBalancer.addServer(new Server("3"));
